@@ -2,8 +2,6 @@
 
 Adel Intelligence is a native macOS chat client for [Ollama](https://ollama.com/). It lets you run conversations with local AI models while keeping the experience fast, focused, and private.
 
-![Adel Intelligence](./assets/banner.jpg)
-
 ## Requirements
 
 - macOS 14 Sonoma or later
