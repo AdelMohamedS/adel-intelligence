@@ -23,9 +23,20 @@ public struct CircleButton: View {
                 .fontWeight(.bold)
                 .padding(8)
         }
+        .accessibilityLabel(accessibilityLabel)
+        .accessibilityInputLabels([accessibilityLabel])
         .background(.background)
         .buttonStyle(.borderless)
         .clipShape(.circle)
         .colorInvert()
+    }
+
+    private var accessibilityLabel: String {
+        switch systemImage {
+        case "xmark", "xmark.circle", "xmark.circle.fill": return "Close"
+        case "chevron.left": return "Back"
+        case "chevron.right": return "Next"
+        default: return systemImage.replacingOccurrences(of: ".", with: " ")
+        }
     }
 }

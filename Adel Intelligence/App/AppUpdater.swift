@@ -9,6 +9,7 @@ import Combine
 import Foundation
 import Sparkle
 
+@MainActor
 @Observable
 final class AppUpdater {
     private var cancellable: AnyCancellable?
@@ -16,6 +17,10 @@ final class AppUpdater {
     
     init(_ updater: SPUUpdater) {
         cancellable = updater.publisher(for: \.canCheckForUpdates)
-            .assign(to: \.canCheckForUpdates, on: self)
+            .sink { [weak self] value in
+                Task { @MainActor [weak self] in
+                    self?.canCheckForUpdates = value
+                }
+            }
     }
 }

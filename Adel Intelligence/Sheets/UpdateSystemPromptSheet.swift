@@ -29,6 +29,8 @@ struct UpdateSystemPromptSheet: View {
                     .textEditorStyle(.plain)
                     .scrollIndicators(.never)
                     .font(Font.system(size: fontSize))
+                    .accessibilityLabel("System prompt")
+                    .accessibilityHint("Enter the instructions used for new responses")
             }
             .padding(.vertical, 16)
             .padding(.horizontal, 10)
@@ -46,6 +48,9 @@ struct UpdateSystemPromptSheet: View {
                     }
                 }
             }
+            .accessibilityAddTraits(.isModal)
+            .accessibilityAction(.escape) { dismiss() }
+            .onExitCommand { dismiss() }
         }
     }
 }

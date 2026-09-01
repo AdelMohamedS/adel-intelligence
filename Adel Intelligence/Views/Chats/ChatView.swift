@@ -160,6 +160,8 @@ struct ChatView: View {
                 .buttonStyle(.borderedProminent)
                 .controlSize(.regular)
                 .help(messageViewModel.loading == .generate ? "Stop generating" : "Send")
+                .accessibilityLabel(messageViewModel.loading == .generate ? "Stop generating" : "Send message")
+                .accessibilityInputLabels(messageViewModel.loading == .generate ? ["Stop generating", "Stop"] : ["Send message", "Send"])
                 .disabled(prompt.isEmpty && messageViewModel.loading != .generate)
             } footer: {
                 chatFieldFooter
@@ -416,6 +418,8 @@ struct ChatView: View {
                         .padding(8)
                         .background(Color(.controlBackgroundColor))
                         .clipShape(RoundedRectangle(cornerRadius: 8))
+                        .accessibilityLabel(title)
+                        .accessibilityHint("Enter text for the comparison")
                 }
             }
         }
@@ -460,6 +464,9 @@ struct ChatView: View {
                 }
             }
             .frame(minWidth: 640, idealWidth: 720, minHeight: 520, idealHeight: 600)
+            .accessibilityAddTraits(.isModal)
+            .accessibilityAction(.escape, onClose)
+            .onExitCommand(perform: onClose)
         }
     }
     

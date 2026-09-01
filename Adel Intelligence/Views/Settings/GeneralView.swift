@@ -14,6 +14,8 @@ struct GeneralView: View {
     
     @State private var isUpdateOllamaHostPresented = false
     @State private var isUpdateSystemPromptPresented = false
+    @AccessibilityFocusState private var hostChangeFocused: Bool
+    @AccessibilityFocusState private var promptChangeFocused: Bool
     
     var body: some View {
         Form {
@@ -31,6 +33,7 @@ struct GeneralView: View {
                         Spacer()
                         
                         Button("Change", action: { isUpdateOllamaHostPresented = true })
+                            .accessibilityFocused($hostChangeFocused)
                     }
                 }
             } footer: {
@@ -52,6 +55,7 @@ struct GeneralView: View {
                         Spacer()
                         
                         Button("Change", action: { isUpdateSystemPromptPresented = true })
+                            .accessibilityFocused($promptChangeFocused)
                     }
                 }
             } footer: {
@@ -68,11 +72,13 @@ struct GeneralView: View {
             UpdateOllamaHostSheet(host: defaultHost) { host in
                 self.defaultHost = host
             }
+            .onDisappear { hostChangeFocused = true }
         }
         .sheet(isPresented: $isUpdateSystemPromptPresented) {
             UpdateSystemPromptSheet(prompt: defaultSystemPrompt) { prompt in
                 self.defaultSystemPrompt = prompt
             }
+            .onDisappear { promptChangeFocused = true }
         }
     }
 }

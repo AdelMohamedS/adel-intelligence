@@ -14,6 +14,7 @@ import SwiftData
 final class MessageViewModel {
     private var modelContext: ModelContext
     private var generationTask: Task<Void, Never>?
+    private var generationRequestID = UUID()
     
     var messages: [Message] = []
     var tempResponse: String = ""
@@ -43,6 +44,9 @@ final class MessageViewModel {
     }
     
     func generate(_ ollamaKit: OllamaKit, activeChat: Chat, prompt: String) {
+        generationTask?.cancel()
+        let requestID = UUID()
+        generationRequestID = requestID
         let message = Message(prompt: prompt)
         message.chat = activeChat
         messages.append(message)
@@ -50,15 +54,21 @@ final class MessageViewModel {
         
         self.loading = .generate
         self.error = nil
+        tempResponse = ""
         
-        generationTask = Task {
-            defer { self.loading = nil }
+        generationTask = Task { [weak self] in
+            guard let self else { return }
+            defer {
+                guard self.generationRequestID == requestID else { return }
+                self.loading = nil
+                self.generationTask = nil
+            }
             
             do {
                 let data = message.toOKChatRequestData(messages: self.messages)
                 
                 for try await chunk in ollamaKit.chat(data: data) {
-                    if Task.isCancelled { break }
+                    if Task.isCancelled || self.generationRequestID != requestID { return }
                     
                     tempResponse = tempResponse + (chunk.message?.content ?? "")
                     
@@ -95,7 +105,10 @@ final class MessageViewModel {
                     activeChat.modifiedAt = .now
                     tempResponse = ""
                 }
+            } catch is CancellationError {
+                // Cancellation is expected when the user stops generation.
             } catch {
+                guard self.generationRequestID == requestID else { return }
                 self.error = .generate(error.localizedDescription)
             }
         }
@@ -103,19 +116,28 @@ final class MessageViewModel {
     
     func regenerate(_ ollamaKit: OllamaKit, activeChat: Chat) {
         guard let lastMessage = messages.last else { return }
+        generationTask?.cancel()
+        let requestID = UUID()
+        generationRequestID = requestID
         lastMessage.response = nil
         
         self.loading = .generate
         self.error = nil
+        tempResponse = ""
         
-        generationTask = Task {
-            defer { self.loading = nil }
+        generationTask = Task { [weak self] in
+            guard let self else { return }
+            defer {
+                guard self.generationRequestID == requestID else { return }
+                self.loading = nil
+                self.generationTask = nil
+            }
             
             do {
                 let data = lastMessage.toOKChatRequestData(messages: self.messages)
                 
                 for try await chunk in ollamaKit.chat(data: data) {
-                    if Task.isCancelled { break }
+                    if Task.isCancelled || self.generationRequestID != requestID { return }
                     
                     tempResponse = tempResponse + (chunk.message?.content ?? "")
                     
@@ -148,7 +170,10 @@ final class MessageViewModel {
                     activeChat.modifiedAt = .now
                     tempResponse = ""
                 }
+            } catch is CancellationError {
+                // Cancellation is expected when the user stops generation.
             } catch {
+                guard self.generationRequestID == requestID else { return }
                 self.error = .generate(error.localizedDescription)
             }
         }
@@ -168,8 +193,16 @@ final class MessageViewModel {
         let userMessage = OKChatRequestData.Message(role: .user, content: "Just reply with a short title about this conversation. One line maximum. No markdown.")
         requestMessages.append(userMessage)
         
-        generationTask = Task {
-            defer { self.loading = nil }
+        let requestID = UUID()
+        generationRequestID = requestID
+        generationTask?.cancel()
+        generationTask = Task { [weak self] in
+            guard let self else { return }
+            defer {
+                guard self.generationRequestID == requestID else { return }
+                self.loading = nil
+                self.generationTask = nil
+            }
             
             activeChat.name = "New Chat"
             var title: String = ""
@@ -177,7 +210,7 @@ final class MessageViewModel {
                 var isReasoningContent = false
                 
                 for try await chunk in ollamaKit.chat(data: OKChatRequestData(model: activeChat.model, messages: requestMessages)) {
-                    if Task.isCancelled { break }
+                    if Task.isCancelled || self.generationRequestID != requestID { return }
                     
                     guard let content = chunk.message?.content else { continue }
                     
@@ -202,7 +235,10 @@ final class MessageViewModel {
                         activeChat.modifiedAt = .now
                     }
                 }
+            } catch is CancellationError {
+                // Cancellation is expected when generation is stopped or replaced.
             } catch {
+                guard self.generationRequestID == requestID else { return }
                 self.error = .generateTitle(error.localizedDescription)
             }
         }
@@ -210,7 +246,6 @@ final class MessageViewModel {
     
     func cancelGeneration() {
         self.generationTask?.cancel()
-        self.loading = .generate
     }
 }
 

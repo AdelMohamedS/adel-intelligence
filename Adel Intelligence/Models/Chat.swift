@@ -24,7 +24,7 @@ final class Chat: Identifiable {
     var createdAt: Date = Date.now
     var modifiedAt: Date = Date.now
     
-    @Relationship(deleteRule: .cascade)
+    @Relationship(deleteRule: .cascade, inverse: \Message.chat)
     var messages: [Message] = []
     
     init(model: String) {

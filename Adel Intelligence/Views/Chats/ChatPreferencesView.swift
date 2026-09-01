@@ -17,6 +17,8 @@ struct ChatPreferencesView: View {
     
     @State private var isUpdateOllamaHostPresented: Bool = false
     @State private var isUpdateSystemPromptPresented: Bool = false
+    @AccessibilityFocusState private var hostChangeFocused: Bool
+    @AccessibilityFocusState private var promptChangeFocused: Bool
     
     @Default(.defaultModel) private var model: String
     @State private var host: String
@@ -79,6 +81,7 @@ struct ChatPreferencesView: View {
                     Button("Change", action: { isUpdateOllamaHostPresented = true })
                         .buttonStyle(.accessoryBar)
                         .foregroundColor(.accent)
+                        .accessibilityFocused($hostChangeFocused)
                 }
             }
             .onChange(of: host) { _, newValue in
@@ -102,6 +105,7 @@ struct ChatPreferencesView: View {
                     Button("Change", action: { isUpdateSystemPromptPresented = true })
                         .buttonStyle(.accessoryBar)
                         .foregroundColor(.accent)
+                        .accessibilityFocused($promptChangeFocused)
                 }
             }
             .onChange(of: systemPrompt) { _, newValue in
@@ -182,11 +186,13 @@ struct ChatPreferencesView: View {
             UpdateOllamaHostSheet(host: host) { host in
                 self.host = host
             }
+            .onDisappear { hostChangeFocused = true }
         }
         .sheet(isPresented: $isUpdateSystemPromptPresented) {
             UpdateSystemPromptSheet(prompt: systemPrompt) { prompt in
                 self.systemPrompt = prompt
             }
+            .onDisappear { promptChangeFocused = true }
         }
     }
 }

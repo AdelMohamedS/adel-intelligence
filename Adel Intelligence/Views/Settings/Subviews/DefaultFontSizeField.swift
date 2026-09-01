@@ -25,8 +25,12 @@ struct DefaultFontSizeField: View {
                 TextField(String(Default(.fontSize).defaultValue), value: $fontSize, format: .number.precision(.fractionLength(0)))
                     .textFieldStyle(.roundedBorder)
                     .frame(maxWidth: width)
+                    .accessibilityLabel("Font size")
+                    .accessibilityValue("\(Int(fontSize)) points")
+                    .accessibilityHint("Enter a font size from \(Int(range.lowerBound)) to \(Int(range.upperBound))")
 
                 Stepper("Font size", value: $fontSize, in: range, step: 1)
+                    .accessibilityInputLabels(["Font size", "Adjust font size"])
             }
             .labelsHidden()
             .onChange(of: fontSize, { oldValue, newValue in

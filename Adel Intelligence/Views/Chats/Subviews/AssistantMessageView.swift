@@ -24,6 +24,7 @@ struct AssistantMessageView: View {
 
     @Environment(CodeHighlighter.self) private var codeHighlighter
     @AppStorage("experimentalCodeHighlighting") private var experimentalCodeHighlighting = false
+    @AccessibilityFocusState private var showChartsFocused: Bool
 
     init(
         content: String,
@@ -50,6 +51,8 @@ struct AssistantMessageView: View {
             if isGenerating && content.isEmpty {
                 ProgressView()
                     .controlSize(.small)
+                    .accessibilityLabel("Generating response")
+                    .accessibilityAddTraits(.updatesFrequently)
             } else {
 				Markdown(convertThinkTagsToMarkdownQuote(in: content))
                     .textSelection(.enabled)
@@ -63,6 +66,9 @@ struct AssistantMessageView: View {
                     .markdownTheme(.adel-intelligence)
                     .markdownCodeSyntaxHighlighter(experimentalCodeHighlighting ? codeHighlighter : .plainText)
                     .id(codeHighlighter.stateHashValue)
+                    .accessibilityElement(children: .combine)
+                    .accessibilityLabel("Assistant response")
+                    .accessibilityValue(content)
 
                 HStack(spacing: 16) {
                     MessageButton("Copy", systemImage: "doc.on.doc", action: { copyAction(content) })
@@ -77,8 +83,10 @@ struct AssistantMessageView: View {
                             "Show Charts", systemImage: "chart.bar",
                             action: {
                                 print("Show Charts button clicked!")
+                                showChartsFocused = true
                                 showChartsAction()
                             })
+                            .accessibilityFocused($showChartsFocused)
                     }
                 }
                 .hide(if: isLastMessage && isGenerating)
@@ -130,5 +138,3 @@ struct AssistantMessageView: View {
 		return result
 	}
 }
-
-

@@ -88,6 +88,8 @@ struct ComparisonChatView: View {
                             .padding(8)
                             .background(Color(.controlBackgroundColor))
                             .clipShape(RoundedRectangle(cornerRadius: 8))
+                            .accessibilityLabel("Enter Prompt")
+                            .accessibilityHint("Enter the prompt to compare")
                     }
 
                     // ChatGPT Response
@@ -101,6 +103,8 @@ struct ComparisonChatView: View {
                             .padding(8)
                             .background(Color(.controlBackgroundColor))
                             .clipShape(RoundedRectangle(cornerRadius: 8))
+                            .accessibilityLabel("Enter ChatGPT's Response")
+                            .accessibilityHint("Enter ChatGPT's response")
                     }
 
                     // Microsoft Copilot Response
@@ -114,6 +118,8 @@ struct ComparisonChatView: View {
                             .padding(8)
                             .background(Color(.controlBackgroundColor))
                             .clipShape(RoundedRectangle(cornerRadius: 8))
+                            .accessibilityLabel("Enter Microsoft Copilot's Response")
+                            .accessibilityHint("Enter Microsoft's response")
                     }
 
                     // Google Gemini Response
@@ -127,6 +133,8 @@ struct ComparisonChatView: View {
                             .padding(8)
                             .background(Color(.controlBackgroundColor))
                             .clipShape(RoundedRectangle(cornerRadius: 8))
+                            .accessibilityLabel("Enter Google Gemini's Response")
+                            .accessibilityHint("Enter Google's response")
                     }
 
                     // Comparison Output
@@ -147,6 +155,7 @@ struct ComparisonChatView: View {
                                         systemImage: showChart ? "chart.bar.xaxis" : "chart.bar")
                                 }
                                 .buttonStyle(.borderless)
+                                .accessibilityInputLabels([showChart ? "Hide chart" : "Show chart", "Chart"])
                             }
 
                             if showChart {
@@ -175,6 +184,7 @@ struct ComparisonChatView: View {
                                 .clipShape(RoundedRectangle(cornerRadius: 8))
                         }
                         .buttonStyle(BorderlessButtonStyle())
+                        .accessibilityInputLabels(["Submit comparison", "Submit"])
                         .disabled(
                             userPrompt.isEmpty || chatGPTResponse.isEmpty || copilotResponse.isEmpty
                                 || geminiResponse.isEmpty)
@@ -189,6 +199,7 @@ struct ComparisonChatView: View {
                                 .clipShape(RoundedRectangle(cornerRadius: 8))
                         }
                         .buttonStyle(BorderlessButtonStyle())
+                        .accessibilityInputLabels(["Test chart", "Chart test"])
                     }
                 }
                 .padding()

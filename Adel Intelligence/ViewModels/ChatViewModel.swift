@@ -14,6 +14,8 @@ import SwiftUI
 @Observable
 final class ChatViewModel {
     private var modelContext: ModelContext
+    private var fetchModelsTask: Task<Void, Never>?
+    private var fetchModelsRequestID = UUID()
     private var _chatNameTemp: String = ""
     
     var models: [String] = []
@@ -50,14 +52,26 @@ final class ChatViewModel {
     }
     
     func fetchModels(_ ollamaKit: OllamaKit) {
+        fetchModelsTask?.cancel()
+        let requestID = UUID()
+        fetchModelsRequestID = requestID
         self.loading = .fetchModels
         self.error = nil
         
-        Task {
+        fetchModelsTask = Task { [weak self] in
+            guard let self else { return }
+
             do {
-                defer { self.loading = nil }
+                defer {
+                    guard self.fetchModelsRequestID == requestID else { return }
+                    self.loading = nil
+                    self.fetchModelsTask = nil
+                }
                 
                 let isReachable = await ollamaKit.reachable()
+
+                try Task.checkCancellation()
+                guard self.fetchModelsRequestID == requestID else { return }
                 
                 guard isReachable else {
                     self.error = .fetchModels("Unable to connect to Ollama server. Please verify that Ollama is running and accessible.")
@@ -65,6 +79,8 @@ final class ChatViewModel {
                 }
                 
                 let response = try await ollamaKit.models()
+                try Task.checkCancellation()
+                guard self.fetchModelsRequestID == requestID else { return }
                 self.models = response.models.map { $0.name }
                 
                 guard !self.models.isEmpty else {
@@ -75,7 +91,10 @@ final class ChatViewModel {
                 if let host = activeChat?.host, host.isEmpty {
                     self.activeChat?.host = self.models.first
                 }
+            } catch is CancellationError {
+                // Cancellation is expected when a newer request replaces this one.
             } catch {
+                guard self.fetchModelsRequestID == requestID else { return }
                 self.error = .fetchModels(error.localizedDescription)
             }
         }

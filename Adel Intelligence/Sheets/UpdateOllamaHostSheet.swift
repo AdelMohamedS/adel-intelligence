@@ -28,6 +28,8 @@ struct UpdateOllamaHostSheet: View {
                 Section {
                     TextField("Enter the Ollama host", text: $host)
                         .labelsHidden()
+                        .accessibilityLabel("Ollama host")
+                        .accessibilityHint("Enter a URL such as http://localhost:11434")
                 } footer: {
                     Text(String(stringLiteral: "Enter the Ollama host (e.g., http://localhost:11434)"))
                         .foregroundStyle(.secondary)
@@ -51,6 +53,9 @@ struct UpdateOllamaHostSheet: View {
                         .disabled(viewState == .loading)
                 }
             }
+            .accessibilityAddTraits(.isModal)
+            .accessibilityAction(.escape) { dismiss() }
+            .onExitCommand { dismiss() }
         }
     }
     

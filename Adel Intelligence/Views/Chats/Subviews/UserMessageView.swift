@@ -33,6 +33,9 @@ struct UserMessageView: View {
                     .textSelection(.enabled)
                     .font(Font.system(size: fontSize))
                     .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .accessibilityElement(children: .combine)
+                    .accessibilityLabel("Your message")
+                    .accessibilityValue(content)
                 
                 HStack(spacing: 16){
                     MessageButton("Copy", systemImage: "doc.on.doc", action: { copyAction(content) })
