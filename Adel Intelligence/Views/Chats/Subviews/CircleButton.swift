@@ -22,10 +22,12 @@ public struct CircleButton: View {
                 .foregroundStyle(.foreground)
                 .fontWeight(.bold)
                 .padding(8)
+                .frame(minWidth: 44, minHeight: 44)
         }
         .accessibilityLabel(accessibilityLabel)
         .accessibilityInputLabels([accessibilityLabel])
         .background(.background)
+        .contentShape(Circle())
         .buttonStyle(.borderless)
         .clipShape(.circle)
         .colorInvert()

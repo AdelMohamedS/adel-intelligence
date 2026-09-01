@@ -11,6 +11,24 @@ import Sparkle
 import SwiftUI
 import SwiftData
 
+enum AdelIntelligenceSchemaV1: VersionedSchema {
+    static let versionIdentifier = Schema.Version(1, 0, 0)
+
+    static var models: [any PersistentModel.Type] {
+        [Chat.self, Message.self]
+    }
+}
+
+enum AdelIntelligenceMigrationPlan: SchemaMigrationPlan {
+    static var schemas: [any VersionedSchema.Type] {
+        [AdelIntelligenceSchemaV1.self]
+    }
+
+    static var stages: [MigrationStage] {
+        []
+    }
+}
+
 @main
 struct AdelIntelligenceApp: App {
     @State private var appUpdater: AppUpdater
@@ -21,11 +39,15 @@ struct AdelIntelligenceApp: App {
     @State private var codeHighlighter: CodeHighlighter
 
     var sharedModelContainer: ModelContainer = {
-        let schema = Schema([Chat.self, Message.self])
+        let schema = Schema(versionedSchema: AdelIntelligenceSchemaV1.self)
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
         
         do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
+            return try ModelContainer(
+                for: schema,
+                migrationPlan: AdelIntelligenceMigrationPlan.self,
+                configurations: [modelConfiguration]
+            )
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }

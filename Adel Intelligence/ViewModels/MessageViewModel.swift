@@ -24,8 +24,17 @@ final class MessageViewModel {
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
     }
+
+    deinit {
+        generationTask?.cancel()
+    }
     
     func load(of chat: Chat?) {
+        generationTask?.cancel()
+        generationTask = nil
+        generationRequestID = UUID()
+        tempResponse = ""
+
         guard let chat = chat else { return }
         
         let chatId = chat.id

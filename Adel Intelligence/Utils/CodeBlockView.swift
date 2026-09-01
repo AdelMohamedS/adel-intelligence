@@ -13,6 +13,7 @@ struct CodeBlockView: View {
 
     let configuration: CodeBlockConfiguration
     @State private var isCopied = false
+    @State private var copyResetID = UUID()
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -51,6 +52,18 @@ struct CodeBlockView: View {
             RoundedRectangle(cornerRadius: 8)
                 .stroke(.secondary, lineWidth: 0.2)
         )
+        .task(id: copyResetID) {
+            guard isCopied else { return }
+
+            do {
+                try await Task.sleep(for: .seconds(2))
+            } catch {
+                return
+            }
+
+            guard !Task.isCancelled else { return }
+            isCopied = false
+        }
     }
 
     var headerBackground: some View {
@@ -70,10 +83,7 @@ struct CodeBlockView: View {
         pasteboard.clearContents()
         pasteboard.setString(configuration.content, forType: .string)
         isCopied = true
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            isCopied = false
-        }
+        copyResetID = UUID()
     }
 }
 

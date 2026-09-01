@@ -114,6 +114,14 @@ final class ChatViewModel {
     func create(model: String) {
         let chat = Chat(model: model)
         self.modelContext.insert(chat)
+
+        do {
+            try self.modelContext.save()
+        } catch {
+            self.modelContext.delete(chat)
+            self.error = .save(error.localizedDescription)
+            return
+        }
         
         self.chats.insert(chat, at: 0)
         self.selectedChats = [chat]
@@ -124,22 +132,45 @@ final class ChatViewModel {
         guard let activeChat else { return }
         
         if let index = self.chats.firstIndex(where: { $0.id == activeChat.id }) {
+            let previousName = self.chats[index].name
+            let previousModifiedAt = self.chats[index].modifiedAt
             self.chats[index].name = _chatNameTemp
             self.chats[index].modifiedAt = .now
+
+            do {
+                try self.modelContext.save()
+            } catch {
+                self.chats[index].name = previousName
+                self.chats[index].modifiedAt = previousModifiedAt
+                self.error = .save(error.localizedDescription)
+            }
         }
     }
     
     func remove() {
         for chat in selectedChats {
             self.modelContext.delete(chat)
-            self.chats.removeAll(where: { $0.id == chat.id })
+        }
+
+        do {
+            try self.modelContext.save()
+            self.chats.removeAll(where: { self.selectedChats.contains($0) })
+            self.selectedChats.removeAll()
+        } catch {
+            self.error = .save(error.localizedDescription)
         }
     }
     
     func removeTemporaryChat(chatToRemove: Chat) {
         if (chatToRemove.name == Defaults[.defaultChatName] && chatToRemove.messages.isEmpty) {
             self.modelContext.delete(chatToRemove)
-            self.chats.removeAll(where: { $0.id == chatToRemove.id })
+
+            do {
+                try self.modelContext.save()
+                self.chats.removeAll(where: { $0.id == chatToRemove.id })
+            } catch {
+                self.error = .save(error.localizedDescription)
+            }
         }
     }
 }
@@ -151,4 +182,5 @@ enum ChatViewModelLoading {
 enum ChatViewModelError: Error {
     case fetchModels(String)
     case load(String)
+    case save(String)
 }

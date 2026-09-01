@@ -23,10 +23,11 @@ struct MessageButton: View {
             Label(titleKey, systemImage: systemImage)
                 .help(titleKey)
                 .labelStyle(.iconOnly)
+                .frame(minWidth: 44, minHeight: 44)
         }
         .accessibilityLabel(titleKey)
         .accessibilityInputLabels([titleKey])
-        .frame(minWidth: 20, minHeight: 20)
+        .contentShape(Rectangle())
         .buttonStyle(.borderless)
     }
 }
