@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>HELP_URL</key>
+	<string>https://github.com/AdelMohamedS/adel-intelligence/issues</string>
+	<key>SUEnableInstallerLauncherService</key>
+	<true/>
+	<key>SUPublicEDKey</key>
+	<string>xEv1HCqq1iI29hbUSHP7BuExQBfIMupe2d1Xa5bvW2Y=</string>
+</dict>
+</plist>
