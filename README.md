@@ -1,71 +1,68 @@
-<div>
-  <div align="center">
-    <img alt="app icon" src="./Adel Intelligence/Resources/Assets.xcassets/AppIcon.appiconset/AppIcon_256x256.png" width="128px" height="128px">
-    <h1>Adel Intelligence - Mac app for <a href="https://github.com/ollama/ollama">Ollama</a></h1>
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="./assets/banner-night.jpg">
-      <img alt="banner" src="./assets/banner.jpg">
-    </picture>
-  </div>
-<div>
+# Adel Intelligence
 
-## ⚠️ Important Notice
+Adel Intelligence is a native macOS chat client for [Ollama](https://ollama.com/). It lets you run conversations with local AI models while keeping the experience fast, focused, and private.
 
-> Adel Intelligence is always free and open-source. You can only download Adel Intelligence from this official repository. Any commercial apps that use the name Adel Intelligence are not affiliated with or endorsed by me, the original creator.
+![Adel Intelligence](./assets/banner.jpg)
 
-## Prerequisites
+## Requirements
 
-- macOS 14.0 Sonoma or later.
-- Ollama should be installed on your Mac and ensure you have at least one Ollama model pulled.
+- macOS 14 Sonoma or later
+- [Ollama](https://ollama.com/) installed and running
+- At least one Ollama model downloaded locally
 
-## Installation
+## Getting started
 
-### Using Homebrew
+1. Install Ollama from [ollama.com](https://ollama.com/).
+2. Download a model, for example:
 
-```bash
-brew install --cask adel-intelligence
-```
+   ```bash
+   ollama pull llama3.2
+   ```
 
-### Download from GitHub
+3. Open Adel Intelligence.
+4. Choose a model and start a conversation.
 
-You can download the latest version of Adel Intelligence from the [releases page](https://github.com/AdelMohamedS/adel-intelligence/releases).
+The default Ollama server is `http://localhost:11434`. You can change the host from the app’s chat preferences when using a local or remote Ollama server.
 
 ## Features
 
-- Works with all Ollama models.
-- Customizable host.
-- Syntax highlighting.
-- Simple and easy to use.
-- Free and open source.
-- Native.
+- Native SwiftUI macOS interface
+- Conversations with local Ollama models
+- Custom Ollama host configuration
+- Streaming responses
+- Conversation history stored locally with SwiftData
+- Markdown rendering and syntax-highlighted code blocks
+- Chat comparison tools for reviewing responses from other assistants
+- Adjustable font size and light/dark appearance support
 
-And more...
+## Screenshots
 
-## Screenshot
+<p align="center">
+  <img src="./assets/screenshot.png" alt="Adel Intelligence light appearance" width="720">
+  <img src="./assets/screenshot-dark.png" alt="Adel Intelligence dark appearance" width="720">
+</p>
 
-<div align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="./assets/screenshot-dark.png">
-    <img alt="screenshot" src="./assets/screenshot.png">
-  </picture>
-</div>
+## Build from source
 
-## Supporters
+1. Clone the repository:
 
-I'm grateful for the support from the community that enables me to continue developing open-source tools. Among these supporters is [BoltAI](https://boltai.com?ref=adel-intelligence), another ChatGPT app for Mac that excels in both design and functionality. Like Adel Intelligence, [BoltAI](https://boltai.com?ref=adel-intelligence) offers offline capabilities through Ollama, providing a seamless experience even without internet access. If you value reliable and elegant tools, [BoltAI](https://boltai.com?ref=adel-intelligence) is definitely worth exploring.
+   ```bash
+   git clone https://github.com/AdelMohamedS/adel-intelligence.git
+   cd adel-intelligence
+   ```
+
+2. Open `Adel Intelligence.xcodeproj` in Xcode.
+3. Allow Swift Package Manager to resolve the project dependencies.
+4. Select the Adel Intelligence target and run it on macOS.
+
+## Contributing
+
+Bug reports, accessibility feedback, and focused improvements are welcome through [GitHub Issues](https://github.com/AdelMohamedS/adel-intelligence/issues) and pull requests.
 
 ## Acknowledgements
 
-- [ChatField by @kevinhermawan](https://github.com/kevinhermawan/ChatField)
-- [Defaults by @sindresorhus](https://github.com/sindresorhus/Defaults)
-- [Highlightr by @raspu](https://github.com/raspu/Highlightr)
-- [OllamaKit by @kevinhermawan](https://github.com/kevinhermawan/OllamaKit)
-- [Sparkle by @sparkle-project](https://github.com/sparkle-project/Sparkle)
-- [swift-markdown-ui by @gonzalezreal](https://github.com/gonzalezreal/swift-markdown-ui)
-- [ViewCondition by @kevinhermawan](https://github.com/kevinhermawan/ViewCondition)
-- [ViewState by @kevinhermawan](https://github.com/kevinhermawan/ViewState)
-- [swiftui-introspect by @siteline](https://github.com/siteline/swiftui-introspect)
+Adel Intelligence uses open-source libraries including [OllamaKit](https://github.com/kevinhermawan/OllamaKit), [ChatField](https://github.com/kevinhermawan/ChatField), [Defaults](https://github.com/sindresorhus/Defaults), [Sparkle](https://github.com/sparkle-project/Sparkle), and [MarkdownUI](https://github.com/gonzalezreal/markdown-ui).
 
 ## License
 
-This repository is available under the [Apache License 2.0](/LICENSE), with a few additional restrictions.
+See the [LICENSE](./LICENSE) file for the applicable license terms.
