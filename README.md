@@ -60,7 +60,3 @@ Bug reports, accessibility feedback, and focused improvements are welcome throug
 ## Acknowledgements
 
 Adel Intelligence uses open-source libraries including [OllamaKit](https://github.com/kevinhermawan/OllamaKit), [ChatField](https://github.com/kevinhermawan/ChatField), [Defaults](https://github.com/sindresorhus/Defaults), [Sparkle](https://github.com/sparkle-project/Sparkle), and [MarkdownUI](https://github.com/gonzalezreal/markdown-ui).
-
-## License
-
-See the [LICENSE](./LICENSE) file for the applicable license terms.
