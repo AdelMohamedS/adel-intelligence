@@ -21,6 +21,8 @@ struct SidebarListItemView: View {
     }
     
     var body: some View {
+        @Bindable var chatViewModelBindable = chatViewModel
+
         VStack(alignment: .leading) {
             Text(name)
                 .font(.headline.weight(.semibold))

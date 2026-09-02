@@ -741,13 +741,9 @@
 				minimumVersion = 2.5.1;
 			};
 		};
-		0AE024892AFEA24600347C18 /* XCRemoteSwiftPackageReference "OllamaKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/kevinhermawan/OllamaKit";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.0.5;
-			};
+		0AE024892AFEA24600347C18 /* XCLocalSwiftPackageReference "OllamaKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Vendor/OllamaKit;
 		};
 		0AF5CB662C62BCA100DF8DA8 /* XCRemoteSwiftPackageReference "AppInfo" */ = {
 			isa = XCRemoteSwiftPackageReference;

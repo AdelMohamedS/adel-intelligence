@@ -47,15 +47,6 @@
       }
     },
     {
-      "identity" : "ollamakit",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/kevinhermawan/OllamaKit",
-      "state" : {
-        "revision" : "b6ff6a0c75a3756450cfb38074f6264be1314abc",
-        "version" : "5.0.8"
-      }
-    },
-    {
       "identity" : "sparkle",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sparkle-project/Sparkle",

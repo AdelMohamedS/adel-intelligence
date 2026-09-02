@@ -63,7 +63,7 @@ struct AssistantMessageView: View {
                         FontSize(CGFloat(fontSize))
                         FontFamily(.system(.monospaced))
                     }
-                    .markdownTheme(.adel-intelligence)
+                    .markdownTheme(.adelIntelligence)
                     .markdownCodeSyntaxHighlighter(experimentalCodeHighlighting ? codeHighlighter : .plainText)
                     .id(codeHighlighter.stateHashValue)
                     .accessibilityElement(children: .combine)

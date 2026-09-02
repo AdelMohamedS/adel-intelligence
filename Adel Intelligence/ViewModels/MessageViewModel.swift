@@ -25,10 +25,6 @@ final class MessageViewModel {
         self.modelContext = modelContext
     }
 
-    deinit {
-        generationTask?.cancel()
-    }
-    
     func load(of chat: Chat?) {
         generationTask?.cancel()
         generationTask = nil
@@ -68,9 +64,10 @@ final class MessageViewModel {
         generationTask = Task { [weak self] in
             guard let self else { return }
             defer {
-                guard self.generationRequestID == requestID else { return }
-                self.loading = nil
-                self.generationTask = nil
+                if self.generationRequestID == requestID {
+                    self.loading = nil
+                    self.generationTask = nil
+                }
             }
             
             do {
@@ -137,9 +134,10 @@ final class MessageViewModel {
         generationTask = Task { [weak self] in
             guard let self else { return }
             defer {
-                guard self.generationRequestID == requestID else { return }
-                self.loading = nil
-                self.generationTask = nil
+                if self.generationRequestID == requestID {
+                    self.loading = nil
+                    self.generationTask = nil
+                }
             }
             
             do {
@@ -208,9 +206,10 @@ final class MessageViewModel {
         generationTask = Task { [weak self] in
             guard let self else { return }
             defer {
-                guard self.generationRequestID == requestID else { return }
-                self.loading = nil
-                self.generationTask = nil
+                if self.generationRequestID == requestID {
+                    self.loading = nil
+                    self.generationTask = nil
+                }
             }
             
             activeChat.name = "New Chat"

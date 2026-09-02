@@ -63,9 +63,10 @@ final class ChatViewModel {
 
             do {
                 defer {
-                    guard self.fetchModelsRequestID == requestID else { return }
-                    self.loading = nil
-                    self.fetchModelsTask = nil
+                    if self.fetchModelsRequestID == requestID {
+                        self.loading = nil
+                        self.fetchModelsTask = nil
+                    }
                 }
                 
                 let isReachable = await ollamaKit.reachable()
