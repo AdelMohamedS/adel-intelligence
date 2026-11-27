@@ -1,4 +1,0 @@
-interface:
-  display_name: "macOS Touch Bar"
-  short_description: "Build and maintain NSTouchBar support in SwiftUI macOS apps"
-  default_prompt: "Use $macos-touchbar to inspect or implement macOS Touch Bar support."
